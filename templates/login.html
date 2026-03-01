@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>EMT Login</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/login.css') }}">
+</head>
+<body>
+    <main class="container">
+        <section class="card">
+            <h1>Secure Access</h1>
+            <p class="sub">Authorized EMTs only. Scan first, then sign in.</p>
+
+            {% if error %}
+                <div class="alert">{{ error }}</div>
+            {% endif %}
+
+            <form method="POST">
+                <label for="username">Username</label>
+                <input id="username" name="username" type="text" autocomplete="username" placeholder="john doe" required />
+
+                <label for="password">Password</label>
+                <input id="password" name="password" type="password" autocomplete="current-password" placeholder="••••••••" required />
+
+                <button type="submit">Sign In</button>
+            </form>
+            
+        </section>
+    </main>
+</body>
+</html>

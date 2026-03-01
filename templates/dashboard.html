@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Alert Dashboard</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/dashboard.css') }}">
+</head>
+<body>
+    <header class="topbar">
+        <div class="branding">
+            <span class="dot"></span>
+            <span class="title">Alert Dashboard</span>
+        </div>
+        <div class="actions">
+            <span class="user">{{ session.get('username', 'Authorized EMT') }}</span>
+            <a class="link" href="{{ url_for('logout') }}">Log out</a>
+        </div>
+    </header>
+
+    <main class="container">
+        <section class="card">
+            <div class="section-header">
+                <div>
+                    <h2>Live Alerts</h2>
+                    <p class="status" id="status">Listening for alerts (auto-refresh every 5s)</p>
+                </div>
+                <button class="button secondary" id="refresh-btn" type="button">Refresh</button>
+            </div>
+            <div class="alert-list" id="alert-list">
+                {% if alerts %}
+                    {% for alert in alerts %}
+                    <div class="alert-card" data-id="{{ alert['id'] }}">
+                        <div>
+                            <div class="alert-meta">
+                                <span class="pill severity-{{ (alert['severity']|string or 'info')|lower }}">{{ (alert['severity']|string or 'info')|capitalize }}</span>
+                                <span class="pill status-{{ (alert['status'] or 'new')|lower }}">{{ (alert['status'] or 'new')|capitalize }}</span>
+                                <span class="timestamp">{{ alert['created_at'] }}</span>
+                            </div>
+                            <div class="alert-title">{{ alert['title'] }}</div>
+                            {% if alert['message'] %}
+                            <p class="alert-message">{{ alert['message'] }}</p>
+                            {% endif %}
+                        </div>
+                        <div class="action-stack">
+                            <button class="button ghost" data-action="status" data-status="responding" data-id="{{ alert['id'] }}">Responding</button>
+                            <button class="button ghost" data-action="status" data-status="resolved" data-id="{{ alert['id'] }}">Resolved</button>
+                            <button class="button secondary" data-action="delete" data-id="{{ alert['id'] }}">Delete</button>
+                        </div>
+                    </div>
+                    {% endfor %}
+                {% else %}
+                    <p class="empty" id="empty-state">No alerts yet. Waiting for incoming alerts…</p>
+                {% endif %}
+            </div>
+        </section>
+
+        <section class="card">
+            <div class="section-header">
+                <h2>Create Alert</h2>
+                <span class="status">Send from this device to responders</span>
+            </div>
+            <form class="form" id="alert-form">
+                <div class="field">
+                    <label for="title">Title *</label>
+                    <input class="input" id="title" name="title" placeholder="e.g., Code Blue in ICU" required />
+                </div>
+                <div class="field">
+                    <label for="message">Message</label>
+                    <textarea class="textarea" id="message" name="message" placeholder="Add context or instructions"></textarea>
+                </div>
+                <div class="field">
+                    <label for="severity">Severity</label>
+                    <select class="select" id="severity" name="severity">
+                        <option value="low">Low</option>
+                        <option value="medium">Medium</option>
+                        <option value="critical">Critical</option>
+                    </select>
+                </div>
+                <div class="actions-row">
+                    <button class="button secondary" type="reset">Clear</button>
+                    <button class="button" type="submit">Send Alert</button>
+                </div>
+            </form>
+        </section>
+    </main>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.10.1/jszip.min.js"></script>
+    <script src="{{ url_for('static', filename='js/dashboard.js') }}"></script>
+</body>
+</html>

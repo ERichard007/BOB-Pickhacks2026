@@ -1,0 +1,204 @@
+:root {
+    font-family: "Segoe UI", sans-serif;
+    background: #050b14;
+    color: #e8edf5;
+    line-height: 1.5;
+}
+
+* { box-sizing: border-box; margin: 0; padding: 0; }
+
+body {
+    min-height: 100vh;
+    background:
+        radial-gradient(120% 120% at 10% 10%, rgba(79, 140, 255, 0.08), transparent),
+        radial-gradient(100% 100% at 90% 0%, rgba(101, 209, 255, 0.08), transparent),
+        #050b14;
+    color: #e8edf5;
+}
+
+a { color: inherit; }
+
+.topbar {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 18px 22px;
+    background: rgba(13, 24, 38, 0.9);
+    border-bottom: 1px solid rgba(255, 255, 255, 0.06);
+    position: sticky;
+    top: 0;
+    backdrop-filter: blur(10px);
+    z-index: 10;
+}
+
+.branding {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    font-weight: 700;
+    letter-spacing: 0.3px;
+}
+
+.dot {
+    width: 12px;
+    height: 12px;
+    border-radius: 999px;
+    background: linear-gradient(135deg, #3f8cff, #65d1ff);
+    box-shadow: 0 0 10px rgba(79, 140, 255, 0.6);
+}
+
+.title {
+    text-transform: uppercase;
+    font-size: 0.95rem;
+    color: #c6d7ec;
+}
+
+.actions {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    font-size: 0.95rem;
+}
+
+.user { color: #9fb3c8; }
+.link {
+    color: #65d1ff;
+    text-decoration: none;
+    font-weight: 700;
+}
+.link:hover { text-decoration: underline; }
+
+.container {
+    width: min(1100px, 94vw);
+    margin: 28px auto 48px;
+    display: flex;
+    flex-direction: column;
+    gap: 18px;
+}
+
+.card {
+    background: #0c1828;
+    border: 1px solid rgba(255, 255, 255, 0.07);
+    border-radius: 18px;
+    padding: 24px;
+    box-shadow: 0 18px 38px rgba(0, 0, 0, 0.35);
+}
+
+.patient-card { border-color: rgba(101, 209, 255, 0.3); }
+
+.meta { color: #8fa2b7; margin-bottom: 6px; }
+.subtext { color: #7f93ac; font-size: 0.95rem; }
+h1 { font-size: 1.9rem; margin-bottom: 6px; }
+h2 { font-size: 1.1rem; }
+
+.card-top {
+    display: flex;
+    align-items: flex-start;
+    justify-content: space-between;
+    gap: 16px;
+    margin-bottom: 14px;
+}
+
+.badge-group {
+    display: flex;
+    gap: 8px;
+    flex-wrap: wrap;
+    justify-content: flex-end;
+}
+
+.badge, .pill {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    padding: 6px 10px;
+    border-radius: 999px;
+    font-size: 0.9rem;
+    background: rgba(255, 255, 255, 0.04);
+    border: 1px solid rgba(255, 255, 255, 0.08);
+}
+
+.pill { color: #cbd7ea; }
+.safe { color: #7fe3b3; }
+.danger { color: #ff8a9a; border-color: rgba(255, 138, 154, 0.4); }
+.muted { color: #8fa2b7; }
+
+.grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: 16px;
+}
+
+.label {
+    color: #8fa2b7;
+    font-size: 0.9rem;
+    margin-bottom: 4px;
+}
+.value {
+    font-size: 1.05rem;
+    font-weight: 600;
+}
+
+.section-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 10px;
+    margin-bottom: 12px;
+}
+
+.item-list {
+    list-style: none;
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+}
+
+.item-list li {
+    background: rgba(255, 255, 255, 0.03);
+    border: 1px solid rgba(255, 255, 255, 0.04);
+    border-radius: 12px;
+    padding: 12px 14px;
+}
+
+.item-title { font-weight: 700; margin-bottom: 3px; }
+.item-detail { color: #c3d1e6; }
+.muted { font-size: 0.9rem; }
+
+.empty {
+    color: #8fa2b7;
+    font-style: italic;
+}
+
+.data-rows {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+}
+
+.data-row {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
+    gap: 10px;
+    align-items: start;
+    background: rgba(255, 255, 255, 0.02);
+    border: 1px solid rgba(255, 255, 255, 0.05);
+    border-radius: 12px;
+    padding: 12px 14px;
+}
+
+.data-main { min-width: 180px; }
+.span-detail {
+    grid-column: 1 / -1;
+    color: #c3d1e6;
+}
+
+.split {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+    gap: 16px;
+}
+
+@media (max-width: 720px) {
+    .card-top { flex-direction: column; align-items: flex-start; }
+    .badge-group { justify-content: flex-start; }
+}

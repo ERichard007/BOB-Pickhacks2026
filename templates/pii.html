@@ -1,0 +1,209 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Patient Information</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/pii.css') }}">
+</head>
+<body>
+    <header class="topbar">
+        <div class="branding">
+            <span class="dot"></span>
+            <span class="title">Patient Record</span>
+        </div>
+        <div class="actions">
+            <span class="user">{{ session.get('username', 'Authorized EMT') }}</span>
+            <a class="link" href="{{ url_for('logout') }}">Log out</a>
+        </div>
+    </header>
+
+    <main class="container">
+        <section class="card patient-card">
+            <div class="card-top">
+                <div>
+                    <p class="meta">Barcode/Code <strong>{{ code }}</strong></p>
+                    <h1>{{ person[1] }}</h1>
+                    <p class="subtext">Internal ID: {{ person[0] }}</p>
+                </div>
+                <div class="badge-group">
+                    <span class="badge">Blood: {{ person[3] or 'Unknown' }}</span>
+                    <span class="badge {{ 'danger' if person[4] else 'muted' }}">DNR: {{ 'Yes' if person[4] else 'No' }}</span>
+                </div>
+            </div>
+            <div class="grid">
+                <div>
+                    <p class="label">Age</p>
+                    <p class="value">{{ person[2] or 'Unknown' }}</p>
+                </div>
+                <div>
+                    <p class="label">Blood Type</p>
+                    <p class="value">{{ person[3] or 'Unknown' }}</p>
+                </div>
+                <div>
+                    <p class="label">DNR Status</p>
+                    <p class="value {{ 'danger' if person[4] else 'safe' }}">{{ 'Do Not Resuscitate' if person[4] else 'Full Code' }}</p>
+                </div>
+            </div>
+        </section>
+
+        <section class="card">
+            <div class="section-header">
+                <h2>Allergies</h2>
+                <span class="pill">{{ allergies|length }} on file</span>
+            </div>
+            {% if allergies %}
+            <ul class="item-list">
+                {% for allergy in allergies %}
+                <li>
+                    <div class="item-title">{{ allergy[0] }}</div>
+                    <p class="item-detail">{{ allergy[1] or 'No details provided' }}</p>
+                </li>
+                {% endfor %}
+            </ul>
+            {% else %}
+            <p class="empty">No allergies recorded.</p>
+            {% endif %}
+        </section>
+
+        <section class="card">
+            <div class="section-header">
+                <h2>Medications</h2>
+                <span class="pill">{{ medications|length }} active/recorded</span>
+            </div>
+            {% if medications %}
+            <div class="data-rows">
+                {% for med in medications %}
+                <div class="data-row">
+                    <div class="data-main">
+                        <div class="item-title">{{ med[1] }}{% if med[2] %} ({{ med[2] }}){% endif %}</div>
+                        <p class="muted">Category: {{ med[0] or 'Unspecified' }}</p>
+                    </div>
+                    <div class="pill">Dose: {{ med[3] or 'N/A' }}</div>
+                    <div class="pill">Frequency: {{ med[4] or 'N/A' }}</div>
+                    <div class="pill">Route: {{ med[5] or 'N/A' }}</div>
+                    <div class="pill {{ 'safe' if med[6] else 'muted' }}">{{ 'Currently taking' if med[6] else 'Not taking' }}</div>
+                    <div class="pill {{ 'danger' if med[7] else 'muted' }}">{{ 'High risk' if med[7] else 'Standard' }}</div>
+                </div>
+                {% endfor %}
+            </div>
+            {% else %}
+            <p class="empty">No medications on file.</p>
+            {% endif %}
+        </section>
+
+        <section class="card">
+            <div class="section-header">
+                <h2>Medical Conditions</h2>
+                <span class="pill">{{ medical_conditions|length }} conditions</span>
+            </div>
+            {% if medical_conditions %}
+            <div class="data-rows">
+                {% for condition in medical_conditions %}
+                <div class="data-row">
+                    <div class="data-main">
+                        <div class="item-title">{{ condition[0] }}</div>
+                        <p class="muted">{{ condition[1] or 'Category unknown' }}</p>
+                    </div>
+                    <div class="pill">Diagnosed: {{ condition[2] or 'Unknown date' }}</div>
+                    <div class="pill">Severity: {{ condition[4] or 'Unspecified' }}</div>
+                    <div class="pill {{ 'safe' if condition[5] else 'muted' }}">{{ 'Active' if condition[5] else 'Inactive' }}</div>
+                    <div class="span-detail">{{ condition[3] or 'No additional details' }}</div>
+                </div>
+                {% endfor %}
+            </div>
+            {% else %}
+            <p class="empty">No medical conditions documented.</p>
+            {% endif %}
+        </section>
+
+        <section class="card split">
+            <div>
+                <div class="section-header">
+                    <h2>Emergency Contacts</h2>
+                    <span class="pill">{{ emergency_contacts|length }}</span>
+                </div>
+                {% if emergency_contacts %}
+                <ul class="item-list">
+                    {% for contact in emergency_contacts %}
+                    <li>
+                        <div class="item-title">{{ contact[0] }}</div>
+                        <p class="muted">{{ contact[1] or 'Relationship not set' }}</p>
+                        <p class="item-detail">{{ contact[2] or 'Phone missing' }}</p>
+                    </li>
+                    {% endfor %}
+                </ul>
+                {% else %}
+                <p class="empty">No emergency contacts on file.</p>
+                {% endif %}
+            </div>
+            <div>
+                <div class="section-header">
+                    <h2>Primary Care</h2>
+                    <span class="pill">{{ primary_care_physicians|length }}</span>
+                </div>
+                {% if primary_care_physicians %}
+                <ul class="item-list">
+                    {% for doc in primary_care_physicians %}
+                    <li>
+                        <div class="item-title">{{ doc[0] }}</div>
+                        <p class="item-detail">{{ doc[1] or 'No contact info' }}</p>
+                    </li>
+                    {% endfor %}
+                </ul>
+                {% else %}
+                <p class="empty">No primary care physician listed.</p>
+                {% endif %}
+            </div>
+        </section>
+
+        <section class="card split">
+            <div>
+                <div class="section-header">
+                    <h2>Surgical History</h2>
+                    <span class="pill">{{ surgical_history|length }}</span>
+                </div>
+                {% if surgical_history %}
+                <div class="data-rows">
+                    {% for surgery in surgical_history %}
+                    <div class="data-row">
+                        <div class="data-main">
+                            <div class="item-title">{{ surgery[0] }}</div>
+                            <p class="muted">{{ surgery[1] or 'Category unknown' }}</p>
+                        </div>
+                        <div class="pill">Date: {{ surgery[2] or 'Unknown' }}</div>
+                        <div class="pill">Risk: {{ 'High' if surgery[4] else 'Normal' }}</div>
+                        <div class="span-detail">{{ surgery[3] or 'No details provided' }}</div>
+                    </div>
+                    {% endfor %}
+                </div>
+                {% else %}
+                <p class="empty">No surgeries on file.</p>
+                {% endif %}
+            </div>
+            <div>
+                <div class="section-header">
+                    <h2>Implantable Devices</h2>
+                    <span class="pill">{{ implantable_devices|length }}</span>
+                </div>
+                {% if implantable_devices %}
+                <div class="data-rows">
+                    {% for device in implantable_devices %}
+                    <div class="data-row">
+                        <div class="data-main">
+                            <div class="item-title">{{ device[0] }}</div>
+                            <p class="muted">{{ device[1] or 'Type unknown' }}</p>
+                        </div>
+                        <div class="pill">Implanted: {{ device[2] or 'Unknown' }}</div>
+                        <div class="span-detail">{{ device[3] or 'No device details provided' }}</div>
+                    </div>
+                    {% endfor %}
+                </div>
+                {% else %}
+                <p class="empty">No implantable devices recorded.</p>
+                {% endif %}
+            </div>
+        </section>
+    </main>
+</body>
+</html>
